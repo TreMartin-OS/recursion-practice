@@ -68,13 +68,35 @@ if (n < 0) {
 // 5. Sum all integers below a given integer. ///////////////////////////////
 // sumBelow(10); // 45
 // sumBelow(7); // 21
-var sumBelow = function(n, total='') {
+var sumBelow = function(n, sTotal=0) {
+// Base
+if (n === 0) {
+  return sTotal;
+} 
+// Recursion - Need to push all digits into an arry & then add them up?
+sTotal += n;
+return sumBelow(n - 1, sTotal);
 };
+console.log(sumBelow(10));
 
 // 6. Get the integers in range (x, y). //////////////////////////////
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
-var range = function(x, y) {
+var range = function (x, y, rList = []) {
+  // Base
+  if (y === undefined) {
+    return rList;
+  } else if (x === y) {
+    return rList.slice(1);
+  }
+  // Recursion
+
+  rList.push(x);
+  return range(x + 1, y, rList);
 };
+
+// console.log(range(2, 9));
+
+
 
 // 7. Compute the exponent of a number. //////////////////////////////
 // The exponent of a number says how many times the base number is used as a factor.
