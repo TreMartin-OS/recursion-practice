@@ -6,40 +6,64 @@
 // denoted by n!, is the product of all positive integers less than or equal to n.
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
-var factorial = function(n, total='') {
+var factorial = function(n, total=1) {
  // 2 hours & 9 mins in, he gives an example of how to solve this problem. ///////////////////
 // Base
-if (n === 1) {
+if (n === 0) {
   return total;
-}
-// Recursion
-if (n <= 0) {
+} 
+else if (n < 0) {
   return null;
-} else {
-total += n;
+} 
+// Recursion
+if (n > 0) {
+total *= n;
 }
 return factorial(n - 1, total);
 };
 
 
-
 // 2. Compute the sum of an array of integers. /////////////////////////////////
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
-var sum = function(array, total='') {
-
-
+var sum = function(arr, total=0) {
+// Base
+if (arr.length === 0) {
+return total;
+}
+// Recursion
+total += arr[0];
+return sum(arr.slice(1), total)
 };
-
-
 
 // 3. Sum all numbers in an array containing nested arrays. //////////////////////////////
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array, total='') {
+var arraySum = function(arr, total=0) {
+// Base
+if (arr.length === 0) {
+return total;
+}
+// Recursion
+total += arr.flat(2)[0];
+return arraySum(arr.flat(2).slice(1), total)
 };
+// console.log(arraySum([[2, -3, 1, 5, 4],[3, 3, 6, -6], -7, 9])) // expected => 17 // 17 is loggin but I can't tell if this is passing with the Blue
 
 // 4. Check if a number is even. ////////////////////////////////
-var isEven = function(n, answer='') {
+var isEven = function(n) {
+// Base
+if (n === 1) {
+return false;
+} else if (n === 0) {
+  return true;
+}
+// Recursion
+if (n < 0) {
+  return isEven(n + 2);
+} else {
+  return isEven(n - 2);
+}
 };
+// console.log(isEven(-6));
 
 // 5. Sum all integers below a given integer. ///////////////////////////////
 // sumBelow(10); // 45
@@ -86,6 +110,8 @@ var modulo = function(x, y) {
 
 // 12. Write a function that multiplies two numbers without using the * operator  or -  //////////////////////////////
 // JavaScript's Math object.
+// multiply(2, 4); => 4 + 4
+// He recommends default parameters
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
 var multiply = function(x, y) {
 };
