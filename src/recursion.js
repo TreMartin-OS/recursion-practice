@@ -198,25 +198,42 @@ var modulo = function(x, y) {  //// Solve later for Extra practice // **********
 // multiply(2, 4); => 4 + 4
 // He recommends default parameters
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
-var multiply = function(x, y) {
-// Base
-
-// Recursion
-
-  
-
-
+var multiply = function(x, y, count=0) {
+if (y === 0) {
+return count;
+}
+if (y > 0) {
+count += x;
+return multiply(x, y - 1, count); 
+} else if (y < 0) {
+  count -= x;
+  return multiply(x, y + 1, count); 
+}
 };
+
+
 
 // 13. Write a function that divides two numbers without using the / operator  or - //////////////////////////////
 // JavaScript's Math object.
-var divide = function(x, y) {
-  // Base
+var divide = function(x, y, count=0) {
+if (x === 0) {
+  return count;
+  }
 
-// Recursion
-
-  
+if (x > y) {
+  x -= y;
+  count += 1;
+return divide(x - y, y, count); 
+} 
+else if (x < y) {
+  y -= x;
+  count += 1;
+return divide(x + y, y, count); 
+  }
 };
+// start with x & subtract y until x = 0 - count how many times you sub y from x
+// console.log(divide(10, 2)); // 10-2, 8-2, 6-2, 4-2, 2-2: count=5
+// console.log(divide(2, 10)); // Work on later this is optional, & it keeps returning undefined
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers.  The GCD of two - //////////////////////////////
 // integers is the greatest integer that divides both x and y with no remainder.
@@ -237,32 +254,51 @@ var gcd = function(x, y) {
 // compareStr('house', 'houses') // false
 // compareStr('', '') // true
 // compareStr('tomato', 'tomato') // true
-var compareStr = function(str1, str2) {
-  // Base
-
+var compareStr = function(str1, str2, ans=[]) {
+// Base
+if (str1.length === 0 && str2.length === 0) {
+  if (ans.includes(1)) {
+    return false;
+  } else {
+    return true;
+  }
+}
 // Recursion
-
-  
+if (str1[0] === str2[0]) {
+ans.push(0);
+return compareStr(str1.slice(1), str2.slice(1), ans)  
+} else {
+ans.push(1);
+return compareStr(str1.slice(1), str2.slice(1), ans)
+}
 };
+// console.log(compareStr('banana', 'banana'));
+// console.log(compareStr('banana', 'bananas'));
 
 // 16. Write a function that accepts a string and creates an array where each letter -  //////////////////////////////
 // occupies an index of the array.
-var createArray = function(str){
+var createArray = function(str, arr=[]){
   // Base
-
+  if (str.length === 0) {
+    return arr;
+  }
 // Recursion
-
-  
+arr.push(str[0])
+return createArray(str.slice(1), arr)  
 };
+// console.log(createArray('Test This Thang'));
 
 // 17. Reverse the order of an array //////////////////////////////
-var reverseArr = function (arr) {
+var reverseArr = function (arr, arr2=[]) {
   // Base
-
+if (arr.length === 0) {
+    return arr2;
+}
 // Recursion
-
-  
+arr2.unshift(arr[0]);
+return reverseArr(arr.slice(1), arr2)  
 };
+// console.log(reverseArr([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
 
 // 18. Create a new array with a given value and length. //////////////////////////////
 // buildList(0,5) // [0,0,0,0,0]
