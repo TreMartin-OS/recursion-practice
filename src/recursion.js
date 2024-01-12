@@ -127,6 +127,7 @@ var exponent = function(base, exp, eTotal=1) {
 // console.log(exponent(5, -4)); // (4, 2) Returns 16 - (4, -2) Returns 0.0625 - (2,-5) Returns 0.03125;
 // (5,-4) wants 0.0016 but gives 0.0016000000000000005 & this fails the test
 // So total needs a digit limit? Using .toFixed(#) fails the other tests, move on for now
+// Theres way to round down I can look up but he says ignore this for now
 
 // 8. Determine if a number is a power of two. //////////////////////////////////////////////////////////////////////////////////
 // If a number is reached by multiplying 2 several times.
@@ -159,11 +160,15 @@ rArr.unshift(str[0]);
 };
 // console.log(reverse("ฅ/ᐠ•⩊•^ฅ H-Hewwo?? HEWWWOOO??? ฅ^•ﻌ•^ฅ"));
 
-// 10. Write a function that determines if a string is a palindrome. ///////////////////////////////////////////////////////////////
+
+
+// 10. Write a function that determines if a string is a palindrome. ///////////////////////////////////////////////////////////////////////////
 var palindrome = function(str, x=0, pArr=[]) {
+// REGEX var to get rid of unwanteds
+let newStr = str.replace(/\s/g, "").toLowerCase(); // Needed to create a var that removed spaces & caps diffs
 // Base
-if (str.length === pArr.length) {
-  if (str === pArr.join('')) { // Removed 'toLowerCase()' from str be REGEX has to cover cases
+if (newStr.length === pArr.length) {
+  if (newStr === pArr.join('')) { // Removed 'toLowerCase()' from str be REGEX has to cover cases
     return true;
   } else {
     return false;
@@ -171,15 +176,15 @@ if (str.length === pArr.length) {
 }
 // Recursion
 // If I push str to an Arr then use slice, str will be empty & ill have nothing to compare
-pArr.unshift(str[x].toLowerCase());
-return (palindrome(str, x + 1, pArr));
+pArr.unshift(newStr[x]);
+return (palindrome(newStr, x + 1, pArr));
 };
 
 // let testStr = 'Race Car';
-// console.log(testStr.matchAll(/[a-zA-Z]/g));  // Looks like I dont understand how to use regex*************
 // console.log(palindrome('Rotor')); // passing true
 // console.log(palindrome('Race car')); // not passing due to space
 // console.log(palindrome('example')); // passing false
+
 
 
 // 11. Write a function that returns the remainder of x divided by y without using the modulo (%) operator. ////////////////////////////////////
@@ -303,37 +308,47 @@ return reverseArr(arr.slice(1), arr2)
 // 18. Create a new array with a given value and length. //////////////////////////////
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
-var buildList = function(val, len) {
+var buildList = function(val, len, bArr=[]) {
 // Base
-
-
+if (bArr.length === len) {
+  return bArr;
+}
 // Recursion
-
-  
+if (bArr.length < len) {
+bArr.push(val);
+return buildList(val, len, bArr);
+}
 };
-console.log(buildList()); // Work on this tomorrow
+// console.log(buildList(0, 5)); // Work on this tomorrow
 
 // 19. Count the occurence of a value inside a list. //////////////////////////////
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
-var countOccurrence = function(arr, val) {
+var countOccurrence = function(arr, val, count=0) {
 // Base
-
-
+if (arr.length === 0) {
+  return count;
+}
 // Recursion
-
-  
+if (arr[0] === val) {
+  count += 1;
+  return countOccurrence(arr.slice(1), val, count);
+} else {
+  return countOccurrence(arr.slice(1), val, count);
+}
 };
+// console.log(countOccurrence([1, 2, 3, 4, 5, 3], 3));
 
 // 20. Write a recursive version of map. //////////////////////////////
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback, output=[]) {
-// Base
-
+// // Base
+if (array.length === 0) {
+  return output;
+}
 // Recursion
-
-  
-  
+output.push(callback(array[0]));
+return (rMap(array.slice(1), callback, output));
 };
 
 // 21. Write a function that counts the number of times a key occurs in an object. //////////////////////////////
@@ -384,38 +399,53 @@ var fibonacci = function(n) {
 };
 
 // 25. Return the Fibonacci number located at index n of the Fibonacci sequence. //////////////////////////////
+// https://en.wikipedia.org/wiki/Fibonacci_sequence
 // [0,1,1,2,3,5,8,13,21]
 // nthFibo(5); // 5
 // nthFibo(7); // 13
 // nthFibo(3); // 2
-var nthFibo = function(n) {
-// Base
-
-// Recursion
-
-  
+var nthFibo = function(n, next=0, fArr=[0, 1]) { // Do I have to make the fSequence or enter it as an arr?
+// // Base
+if (n < 0) {
+  return null;
+} else if (fArr.length > n) { // Without the +1 it wont return index n, because arrays start at 0
+  return fArr[n];
+}
+// // Recursion
+if (fArr.length < (n + 1)) {
+next = fArr[fArr.length-1] + fArr[fArr.length-2]
+fArr.push(next); // trying to add last 2 nums together & push result to arr
+return nthFibo(n, next, fArr)
+}
 };
+
 
 // 26. Given an array of words, return a new array containing each word capitalized. //////////////////////////////
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
-var capitalizeWords = function(input) {
+var capitalizeWords = function(input, cArr=[]) {
 // Base
-
+if (input.length === 0) {
+  return cArr;
+}
 // Recursion
-
-  
+cArr.push(input[0].toUpperCase())
+return capitalizeWords(input.slice(1), cArr);
 };
 
 // 27. Given an array of strings, capitalize the first letter of each index. //////////////////////////////
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
-var capitalizeFirst = function(arr) {
+var capitalizeFirst = function(arr, cfArr=[]) {
 // Base
-
+if (arr.length === 0) {
+    return cfArr;
+}
 // Recursion
-
-  
+cfArr.push(arr[0][0].toUpperCase() + arr[0].slice(1));
+return capitalizeFirst(arr.slice(1), cfArr);
 };
+// console.log(capitalizeFirst(['car', 'poop', 'banana']));
+
 
 // 28. Return the sum of all even numbers in an object containing nested objects. //////////////////////////////
 // var obj1 = {
@@ -446,26 +476,45 @@ var flatten = function(arrs) {
 
 // 30. Given a string, return an object containing tallies of each letter. //////////////////////////////
 // letterTally('potato'); // {'p':1, 'o':2, 't':2, 'a':1}
-var letterTally = function(str, obj) {
+var letterTally = function(str, obj={}) {
 // Base
-
+if (str.length === 0) {
+  return obj;
+}
 // Recursion
-
-  
+if (obj.hasOwnProperty(str[0])) {
+  obj[str[0]] += 1;
+return letterTally(str.slice(1), obj);
+} else {
+  obj[str[0]] = 1;
+  return letterTally(str.slice(1), obj);
+}
 };
+// console.log(letterTally("potato"));
+
 
 // 31. Eliminate consecutive duplicates in a list.  If the list contains repeated //////////////////////////////
 // elements they should be replaced with a single copy of the element. The order of the
 // elements should not be changed.
 // Example: compress([1, 2, 2, 3, 4, 4, 5, 5, 5]) // [1, 2, 3, 4, 5]
 // Example: compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]) // [1, 2, 3, 4, 2, 5, 4]
-var compress = function(list) {
+var compress = function(list, prev, cArr=[]) {
 // Base
-
+if (list.length === 0) {
+  return cArr;
+}
 // Recursion
-
-  
+if (prev != list[0]) {
+  cArr.push(list[0]);
+  prev = list[0];
+  return compress(list.slice(1), prev, cArr);
+} else {
+  prev = list[0];
+  return compress(list.slice(1), prev, cArr);
+}
 };
+// console.log(compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]));
+
 
 // 32. Augment every element in a list with a new value where each element is an array //////////////////////////////
 // itself.
@@ -481,36 +530,123 @@ var augmentElements = function(arr, aug) {
 // 33. Reduce a series of zeroes to a single 0. //////////////////////////////
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
-var minimizeZeroes = function(arr) {
+var minimizeZeroes = function(arr, prev, mArr=[]) {
 // Base
-
+if (arr.length === 0) {
+  return mArr;
+}
 // Recursion
-
-  
+if (prev != arr[0]) {
+  mArr.push(arr[0]);
+  prev = arr[0]
+  return minimizeZeroes(arr.slice(1), prev, mArr);
+} else if (prev === 0 && arr[0] === 0) {
+  prev = arr[0]
+  return minimizeZeroes(arr.slice(1), prev, mArr);
+} 
 };
+// console.log(minimizeZeroes([2,0,0,0,1,0,0,4]));
+
 
 // 34. Alternate the numbers in an array between positive and negative regardless of //////////////////////////////
 // their original sign.  The first number in the index always needs to be positive.
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
-var alternateSign = function(arr) {
+var alternateSign = function(arr, prev=0, newArr=[]) {
 // Base
-
+if (arr.length === 0) {
+  return newArr;
+}
 // Recursion
+// if newArr is empty, make sure 1st val pushed is positive
+if (newArr.length === 0) {
+  // if arr[0] is positive, push it without edits
+  if (arr[0] > 0) {
+    newArr.push(arr[0]);
+    prev = arr[0];
+    return alternateSign(arr.slice(1), prev, newArr);
+  } else if (arr[0] < 0) { // else if arr0 is negative, push it after inverting
+    newArr.push(-arr[0]);
+    prev = -arr[0];
+    return alternateSign(arr.slice(1), prev, newArr);
+  }
+  //   do I need to return after these? alternateSign(arr.slice(1), asArr);
+} // if previous is Positive, current needs to be pushed but negative
+if (prev > 0 && arr[0] > 0) { // if prev & current are positive, push inverted current 
+    newArr.push(-arr[0]);  //
+    prev = -arr[0]
+    return alternateSign(arr.slice(1), prev, newArr);
+} else if (prev < 0 && arr[0] < 0) {
+  newArr.push(-arr[0]);  //
+  prev = -arr[0]
+  return alternateSign(arr.slice(1), prev, newArr);
+}  else {
+  newArr.push(arr[0]);  //
+  prev = arr[0]
+  return alternateSign(arr.slice(1), prev, newArr);
+} 
+ };
+// console.log(alternateSign([-2,-7,8,3,-1,4]));
 
-  
-};
 
-// 35. Given a string, return a string with digits converted to their word equivalent. //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 35. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
-var numToText = function(str) {
-// Base
+var numToText = function(str, splitStr, newStr=[]) {
+//   // need a chart for nums
+//   const chart = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six', 7:'seven', 8:'seven', 9:'nine', 10:'ten'}
+//   // need to make an array of keys
+//   let checkNums = []
+//   for (let keys in chart) {
+//     checkNums.push(keys)
+//   }
+//   // console.log(checkNums); // Logging correctly
 
-// Recursion
+//   // split str into arr
+//   splitStr = str.split(' ');
+//   // console.log(splitStr); // logging correctly
+// // Base
+// if (splitStr.length === 0) {
+//   return newStr.join('');
+// }
 
-  
+
+// // Recursion
+// // If current arr index isnt a number, push to newStr, if it is a num, convert to word(???) and push to string
+// if (checkNums.includes(splitStr[0])) {
+//   newStr.push(splitStr[0])/**.toLocaleString('english'));*/ // change it to a word somehow & push to newArr  
+//   return numToText(splitStr.slice(1), newStr);
+// } else {
+//   newStr.push(splitStr[0]); // push words to string  
+//   return numToText(splitStr.slice(1), newStr);
+// }
+
 };
+
+// console.log(numToText("I have 5 dogs and 6 ponies"));
+let testTxt = "I have 5 dogs and 6 ponies";
+let splitTxt = testTxt.split(' ');
+// console.log(typeof splitTxt[2]);
+// teach says we have to hard code the num equivalants
+
+  // need a chart for nums
+  const chart = {1:'one', 2:'two', 3:'three', 4:'four', '5':'five', 6:'six', 7:'seven', 8:'seven', 9:'nine', 10:'ten'}
+  // need to make an array of keys
+  let checkNums = []
+  for (let keys in chart) {
+    checkNums.push(keys)
+  }
+console.log(checkNums);
+
+// if (checkNums.includes('5')) {
+//   console.log('true');
+// } // it has to be exact
+if (splitTxt.includes('5')) {
+  console.log(chart[5]);
+}
+
+
 
 // *** EXTRA CREDIT ***
 
