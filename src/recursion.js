@@ -311,6 +311,7 @@ var buildList = function(val, len) {
 
   
 };
+console.log(buildList()); // Work on this tomorrow
 
 // 19. Count the occurence of a value inside a list. //////////////////////////////
 // countOccurrence([2,7,4,4,1,4], 4) // 3
