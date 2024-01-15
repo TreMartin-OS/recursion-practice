@@ -593,111 +593,31 @@ var alternateSign = function (arr, prev = 0, newArr = []) {
 // 35. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
-var numToText = function (str, TF = 0, splitStr, newStr = []) {
-  const chart = { 5: "five", 6: "six" };
-  let checkNums = [];
-  for (let keys in chart) {
-    checkNums.push(keys);
-  } // console.log(checkNums); // Logs right
+var numToText = function (string, newString = '') {
+  const chart = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six', 7:'seven', 8:'seven', 9:'nine'};
+  let array = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   // split input str into arr - required for recursion to not skip letters
-  splitStr = str.split(" "); // console.log(splitStr); // logging correctly
+  // splitStr = str.split(" "); // console.log(splitStr); // logging correctly
 
   // Base
-  if (newStr.length === splitStr.length) {
-    return newStr; // Add .join(' ') after I get the rest to work
+  if (string.length === 0) {
+    return newString; // Add .join(' ') after I get the rest to work
   }
 
   // Recursion
   // Compare all vals in checkNums to 1st val in splitStr  // Verify vals are not already in newStr
 // splitStr should be getting checked & sliced b4 checkNums?
 
-  // Outside Rloop checks checkNums length to make sure every val has been compared to splitStr[0]
-  if (splitStr.length > 0) {    // This means there's still vals to compare
-    if (splitStr[0] === checkNums[0]) { // if they DO match
-      TF = 0; // Might not need a True-False var?
-      newStr.push(chart[0]); // Meant to push charts value of the key to the array
-        return numToText(str, TF, splitStr.slice(1), checkNums, newStr); // returning everything needed for next loop
-    } 
-    else if (splitStr[0] !== checkNums[0] && !newStr.includes(splitStr[0])) { // if they DONT match & its not already in newStr
-      TF = 1; // Needed?
-      newStr.push(splitStr[0]); // Push val to new Arr if its not already in there
-        return numToText(str, TF, splitStr.slice(1), checkNums, newStr);
-    } 
-    else if (splitStr[0] !== checkNums[0] && newStr.includes(splitStr[0])) { // if they DONT match & its already in newStr
-        // No need to push anything if the val is already in the newArr
-        return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-    } 
-    return numToText(str, TF, splitStr, checkNums.slice(1), newStr); 
-  } 
-  else if (splitStr.length === 0) {
-    return numToText(str, TF, splitStr.slice(1), newStr); // Resets checkNums & goes to next val in splitStr
-  }
+if (array.includes(string[0])) {
+  newString += chart[string[0]];
+} else {
+  newString += string[0];
+}
+return numToText(string.slice(1), newString);
 
-////////////////
-  // Outside Rloop checks checkNums length to make sure every val has been compared to splitStr[0]
-  // if (checkNums.length > 0) {    // This means there's still vals to compare
-  //   if (checkNums[0] === splitStr[0]) { // if they DO match
-  //     TF = 0; // Might not need a True-False var?
-  //     newStr.push(chart[0]); // Meant to push charts value of the key to the array
-  //       return numToText(str, TF, splitStr, checkNums.slice(1), newStr); // returning everything needed for next loop
-  //   } 
-    // else if (checkNums[0] != splitStr[0] && !newStr.includes(splitStr[0])) { // if they DONT match & its not already in newStr
-    //   TF = 1; // Needed?
-    //   newStr.push(splitStr[0]); // Push val to new Arr if its not already in there
-    //     return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-    // } 
-    // else if (checkNums[0] != splitStr[0] && newStr.includes(splitStr[0])) { // if they DONT match & its already in newStr
-    //     // No need to push anything if the val is already in the newArr
-    //     return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-    // } 
-    // return numToText(str, TF, splitStr, checkNums, newStr); 
-  // } 
-  // else if (checkNums.length === 0) {
-  //   return numToText(str, TF, splitStr.slice(1), newStr); // Resets checkNums & goes to next val in splitStr
-  // }
-
-
-  // else if (checkNums.length === 0) {
-  //     if (TF === 0) {
-  //   newStr.push(splitStr[0]);
-  //     } else {
-
-  //     }
-
-  // }
-
-  //   // If they DONT match & newStr DOESNT contain splitStr[0]
-  //   if (checkNums[0] !== splitStr[0] && !newStr.includes(splitStr[0])) {
-  //     TF = 1; // Dont push till all comparisons are complete
-  //     return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-  //   }
-
-  //   //   // Do I need something for if they DONT match but newStr DOES contain splitStr[0]?
-  //   else if (checkNums[0] !== splitStr[0] && newStr.includes(splitStr[0])) {
-
-  //     return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-  //   }
-
-  //   // If they DO match - this is where the swap happens
-  //   else if (checkNums[0] == splitStr[0]) {
-  //     // newStr.push(chart[0]); // checkNums & chart are connected // This isnt pushing anything????
-  //     return numToText(str, TF, splitStr, checkNums.slice(1), newStr);
-  //   }
-  //   // Once all comparisons are done:
-  // } else if (checkNums.length === 0) {
-  //   // Comparisons are over, lets mark the results
-  //   if ((TF = 1)) { // NOW you push the word that didn't match
-  //     newStr.push(splitStr[0]);
-  //     return numToText(str, TF, splitStr.slice(1), checkNums, newStr); // NOW you slice splitStr
-  //   } else if ((TF = 0)) {
-
-  //     return numToText(str, TF, splitStr.slice(1), checkNums, newStr); // No carrying TF or checkNums bc they need to reset
-  //   }
-  // }
 };
 
 console.log(numToText("I have 5 dogs and 6 ponies"));
-// console.log(numToText(chart[2]));
 
 
 
